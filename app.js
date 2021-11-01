@@ -8,7 +8,7 @@ dotenv.config();
 
 // Databases
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+  .connect('mongodb+srv://adminCariTim:FarhanBagasAidilFau@maincluster.cnzls.mongodb.net/CariTim?retryWrites=true&w=majority', { useNewUrlParser: true })
   .then(() => console.log("DB Connected"));
 
 mongoose.connection.on("error", (err) => {
@@ -17,6 +17,8 @@ mongoose.connection.on("error", (err) => {
 
 // Routes
 const postRoutes = require("./routes/post");
+const userRoutes = require("./routes/user");
+const adminRoutes = require("./routes/admin");
 
 // Middleware
 app.use(morgan("dev"));
@@ -28,6 +30,8 @@ app.get("/", function (req, res) {
   res.send('BACKEND CARI TIM NIH BOS')
 });
 app.use("/posts", postRoutes);
+app.use("/users", userRoutes);
+app.use("/admins", adminRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

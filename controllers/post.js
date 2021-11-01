@@ -11,7 +11,7 @@ exports.createPost = async (req, res) => {
   const errors = myValidationResult(req);
   // show errors
   if (!errors.isEmpty()) {
-    return res.status(400).send({ success: false, errors: errors.mapped() });
+    return res.status(400).send({ success: false, error: errors.mapped() });
   }
 
   const post = new Post(req.body);
@@ -63,7 +63,7 @@ exports.updatePost = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       success: false,
-      errors: errors.mapped(),
+      error: errors.mapped(),
     });
   }
 
