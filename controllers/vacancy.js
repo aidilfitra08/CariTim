@@ -18,9 +18,10 @@ exports.createVacancy = async (req, res) => {
 
   const vacancy = new Vacancy(req.body);
 
-
+  vacancy.date = new Date.now();
+  
   try {
-    await user.save();
+    await vacancy.save();
   } catch (error) {
     res.status(500).send({
       success: false,
