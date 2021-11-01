@@ -20,6 +20,9 @@ const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
 
+//Vacancy Routes
+const vacancyRoutes = require("./routes/vacancy");
+
 // Middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -32,6 +35,8 @@ app.get("/", function (req, res) {
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
 app.use("/admins", adminRoutes);
+
+app.use("/vacancys", vacancyRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
