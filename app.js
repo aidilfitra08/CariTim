@@ -8,7 +8,7 @@ dotenv.config();
 
 // Databases
 mongoose
-  .connect('mongodb+srv://adminCariTim:FarhanBagasAidilFau@maincluster.cnzls.mongodb.net/CariTim?retryWrites=true&w=majority', { useNewUrlParser: true })
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true })
   .then(() => console.log("DB Connected"));
 
 mongoose.connection.on("error", (err) => {
