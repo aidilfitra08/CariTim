@@ -15,7 +15,10 @@ exports.verifyToken = (req, res, next) => {
       // Next middleware
       next();
     } else {
-      // Forbidden
-      res.sendStatus(403);
+      // Unauthorized
+      res.status(401).send({
+        success: false,
+        error: "please fill the user authentication information",
+      });
     }
 }
