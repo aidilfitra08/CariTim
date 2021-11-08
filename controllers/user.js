@@ -38,6 +38,15 @@ exports.createUser = async (req, res) => {
 };
 
 exports.getUsers = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      res.status(403).send({
+        success: false,
+        error: "unauthorized",
+      });
+    }
+  });
+
   const users = await User.find({ role: 1 }).select("-__v -role -password");
   res.send({ success: true, data: users });
 };
@@ -105,15 +114,20 @@ exports.deleteuser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const body = req.body;
   const password = await User.findOne({ email: body.email }).select("password");
-  const user = await User.findOne({ email: body.email }).select("-__v -password -role");
+  const user = await User.findOne({ email: body.email }).select(
+    "-__v -password -role"
+  );
   if (user) {
     // check user password with hashed password stored in the database
-    const validPassword = await bcrypt.compare(body.password, password.password);
+    const validPassword = await bcrypt.compare(
+      body.password,
+      password.password
+    );
     if (validPassword) {
       jwt.sign(
         { user },
-        "la,dfmkgnbh2qeasdli1r138t7ghivbnwp",
-        { expiresIn: "3h" },
+        process.env.SECRET_KEY,
+        { expiresIn: "1d" },
         (err, token) => {
           res.json({
             success: true,

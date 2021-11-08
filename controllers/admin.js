@@ -5,11 +5,29 @@ const jwt = require("jsonwebtoken");
 const Admin = require("../models/user");
 
 exports.getAdmins = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      res.status(403).send({
+        success: false,
+        error: "unauthorized",
+      });
+    }
+  });
+
   const admins = await Admin.find({ role: 2 }).select("-__v -role -password");
   res.send({ success: true, data: admins });
 };
 
 exports.getAdmin = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      res.status(403).send({
+        success: false,
+        error: "unauthorized",
+      });
+    }
+  });
+
   try {
     const admin = await Admin.findById(req.params.id).select(
       "-__v -role -password"
