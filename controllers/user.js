@@ -1,20 +1,11 @@
-const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const macro = require("../macro");
 
 const User = require("../models/user");
 
 exports.createUser = async (req, res) => {
-  const myValidationResult = validationResult.withDefaults({
-    formatter: (error) => error.msg,
-  });
-
-  // check for errors
-  const errors = myValidationResult(req);
-  // show errors
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ success: false, error: errors.mapped() });
-  }
+  macro.checkValidation(req, res);
 
   const user = new User(req.body);
 
@@ -24,31 +15,33 @@ exports.createUser = async (req, res) => {
   user.password = await bcrypt.hash(user.password, salt);
 
   user.role = 1;
+  // user.phone_number = null;
+  // user.birth_date = null;
+  // user.gender = null;
+  // user.address = null;
+  // user.job = null;
+  // user.instituion = null;
+  // user.about = null;
+  // user.profile_picture = null;
 
   try {
     await user.save();
   } catch (error) {
-    res.status(500).send({
-      success: false,
-      error: error.message,
-    });
+    macro.failResponse(res, error.message, 500);
   }
 
-  res.send({ success: true, data: user });
+  macro.successResponse(res, user);
 };
 
 exports.getUsers = async (req, res) => {
   jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
     if (err) {
-      res.status(403).send({
-        success: false,
-        error: "unauthorized",
-      });
+      macro.failResponse(res, err.message, 403);
     }
   });
 
   const users = await User.find({ role: 1 }).select("-__v -role -password");
-  res.send({ success: true, data: users });
+  macro.successResponse(res, users);
 };
 
 exports.getUser = async (req, res) => {
@@ -56,62 +49,53 @@ exports.getUser = async (req, res) => {
     const user = await User.findById(req.params.id).select(
       "-__v -role -password"
     );
-    res.send({ success: true, data: user });
+    macro.successResponse(res, user);
   } catch {
-    res.status(404).send({
-      success: false,
-      error: "user not found!",
-    });
+    macro.failResponse(res, "user not found", 404);
   }
 };
 
-exports.updateuser = async (req, res) => {
-  const myValidationResult = validationResult.withDefaults({
-    formatter: (error) => {
-      return error.msg;
-    },
+exports.updateUser = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
   });
 
-  // check for errors
-  const errors = myValidationResult(req);
-  // show errors
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      error: errors.mapped(),
-    });
-  }
+  macro.checkValidation(req, res);
 
   try {
-    const user = await user.findById(req.params.id).select("-__v");
+    const user = await User.findById(req.params.id);
+
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+
     Object.assign(user, req.body);
-    user.save();
-    res.send({ success: true, data: user });
+    await user.save();
+    macro.successResponse(res, user);
   } catch {
-    res.status(404).send({
-      success: false,
-      error: "user not found!",
-    });
+    macro.failResponse(res, "user not found", 404);
   }
 };
 
-exports.deleteuser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
   try {
     const user = await user.findById(req.params.id);
     await user.remove();
-    res.send({
-      success: true,
-      data: "user with id = ".concat(req.params.id).concat(" has been deleted"),
-    });
+    macro.successResponse(
+      res,
+      "user with id = ".concat(req.params.id).concat(" has been deleted")
+    );
   } catch {
-    res.status(404).send({
-      success: false,
-      error: "user not found!",
-    });
+    macro.failResponse(res, "user not found", 404);
   }
 };
 
 exports.loginUser = async (req, res) => {
+  macro.checkValidation(req, res);
+
   const body = req.body;
   const password = await User.findOne({ email: body.email }).select("password");
   const user = await User.findOne({ email: body.email }).select(
@@ -129,19 +113,13 @@ exports.loginUser = async (req, res) => {
         process.env.SECRET_KEY,
         { expiresIn: "1d" },
         (err, token) => {
-          res.json({
-            success: true,
-            data: { user: user, token },
-          });
+          macro.successResponse(res, { user: user, token });
         }
       );
     } else {
-      res.status(400).json({ success: false, error: "invalid password!" });
+      macro.failResponse(res, "invalid password", 500);
     }
   } else {
-    res.status(401).send({
-      success: false,
-      error: "user does not exist!",
-    });
+    macro.failResponse(res, "user does not exist", 500);
   }
 };

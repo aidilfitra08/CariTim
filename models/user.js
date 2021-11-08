@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   institution: {
-    type: Number,
+    type: String,
   },
   about: {
     type: String,

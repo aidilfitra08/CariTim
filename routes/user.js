@@ -8,9 +8,9 @@ const router = express.Router();
 router.post("/", validator.createUserValidator, userController.createUser);
 router.get("/", auth.verifyToken, userController.getUsers);
 router.get("/:id", userController.getUser);
-// router.patch("/:id", validator.updateUserValidator, userController.updateUser);
+router.patch("/:id", [auth.verifyToken, validator.updateUserValidator], userController.updateUser);
 // router.delete("/:id", userController.deleteUser);
 
-router.post("/login", userController.loginUser);
+router.post("/login", validator.loginValidator, userController.loginUser);
 
 module.exports = router;

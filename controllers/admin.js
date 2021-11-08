@@ -1,30 +1,23 @@
-const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const macro = require("../macro");
 const Admin = require("../models/user");
 
 exports.getAdmins = async (req, res) => {
   jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
     if (err) {
-      res.status(403).send({
-        success: false,
-        error: "unauthorized",
-      });
+      macro.failResponse(res, err.message, 403);
     }
   });
 
   const admins = await Admin.find({ role: 2 }).select("-__v -role -password");
-  res.send({ success: true, data: admins });
+  macro.successResponse(res, admins);
 };
 
 exports.getAdmin = async (req, res) => {
   jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
     if (err) {
-      res.status(403).send({
-        success: false,
-        error: "unauthorized",
-      });
+      macro.failResponse(res, err.message);
     }
   });
 
@@ -32,16 +25,15 @@ exports.getAdmin = async (req, res) => {
     const admin = await Admin.findById(req.params.id).select(
       "-__v -role -password"
     );
-    res.send({ success: true, data: admin });
+    macro.successResponse(res, admin);
   } catch {
-    res.status(404).send({
-      success: false,
-      error: "admin not found!",
-    });
+    macro.failResponse(res, "admin not found", 404);
   }
 };
 
 exports.loginAdmin = async (req, res) => {
+  macro.checkValidation(req, res);
+  
   const body = req.body;
   const password = await Admin.findOne({ email: body.email,  role: 2 }).select("password");
   const admin = await Admin.findOne({ email: body.email,  role: 2 }).select("-__v -role -password");
@@ -54,19 +46,13 @@ exports.loginAdmin = async (req, res) => {
         "la,dfmkgnbh2qeasdli1r138t7ghivbnwp",
         { expiresIn: "3h" },
         (err, token) => {
-          res.json({
-            success: true,
-            data: { admin: admin, token },
-          });
+          macro.successResponse(res, { admin: admin, token });
         }
       );
     } else {
-      res.status(400).json({ success: false, error: "invalid password!" });
+      macro.failResponse(res, "invalid password!", 500);
     }
   } else {
-    res.status(401).send({
-      success: false,
-      error: "admin does not exist!",
-    });
+    macro.failResponse(res, "admin does not exist!", 500);
   }
 };
