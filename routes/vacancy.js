@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/", validator.createVacancyValidator, vacancyController.createVacancy);
 router.get("/", vacancyController.getVacancys);
 router.get("/:id", vacancyController.getVacancy);
-// router.patch("/:id", validator.updatePostValidator, postController.updatePost);
+router.patch("/:id", validator.updateVacancyValidator, vacancyController.updateVacancy);
 router.delete("/:id", vacancyController.deleteVacancy);
 
 module.exports = router;

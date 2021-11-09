@@ -7,7 +7,7 @@ const vacancySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    
+    default: null,
   },
   type: {
     type: String,

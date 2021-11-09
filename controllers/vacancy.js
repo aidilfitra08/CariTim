@@ -18,8 +18,8 @@ exports.createVacancy = async (req, res) => {
 
   const vacancy = new Vacancy(req.body);
 
-  vacancy.date = new Date.now();
-  
+  vacancy.date = new Date().getTime();
+
   try {
     await vacancy.save();
   } catch (error) {
@@ -45,7 +45,7 @@ exports.getVacancy = async (req, res) => {
     const vacancy = await Vacancy.findById(req.params.id).select(
       "-__v"
     );
-    res.send({ success: true, data: user });
+    res.send({ success: true, data: vacancy });
   } catch {
     res.status(404).send({
       success: false,
@@ -54,35 +54,35 @@ exports.getVacancy = async (req, res) => {
   }
 };
 
-// exports.updateuser = async (req, res) => {
-//   const myValidationResult = validationResult.withDefaults({
-//     formatter: (error) => {
-//       return error.msg;
-//     },
-//   });
+exports.updateVacancy = async (req, res) => {
+  const myValidationResult = validationResult.withDefaults({
+    formatter: (error) => {
+      return error.msg;
+    },
+  });
 
-//   // check for errors
-//   const errors = myValidationResult(req);
-//   // show errors
-//   if (!errors.isEmpty()) {
-//     return res.status(400).json({
-//       success: false,
-//       error: errors.mapped(),
-//     });
-//   }
+  // check for errors
+  const errors = myValidationResult(req);
+  // show errors
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      error: errors.mapped(),
+    });
+  }
 
-//   try {
-//     const user = await user.findById(req.params.id).select("-__v");
-//     Object.assign(user, req.body);
-//     user.save();
-//     res.send({ success: true, data: user });
-//   } catch {
-//     res.status(404).send({
-//       success: false,
-//       error: "user not found!",
-//     });
-//   }
-// };
+  try {
+    const vacancy = await Vacancy.findById(req.params.id);
+    Object.assign(vacancy, req.body);
+    await vacancy.save();
+    res.send({ success: true, data: vacancy });
+  } catch {
+    res.status(404).send({
+      success: false,
+      error: "Vacancy not found!",
+    });
+  }
+};
 
 exports.deleteVacancy = async (req, res) => {
   try {
