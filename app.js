@@ -22,6 +22,7 @@ const adminRoutes = require("./routes/admin");
 
 //Vacancy Routes
 const vacancyRoutes = require("./routes/vacancy");
+const applicantRoutes = require("./routes/applicant");
 
 // Middleware
 app.use(morgan("dev"));
@@ -37,6 +38,7 @@ app.use("/users", userRoutes);
 app.use("/admins", adminRoutes);
 
 app.use("/vacancys", vacancyRoutes);
+app.use("/applicants", applicantRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
