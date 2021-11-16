@@ -14,10 +14,10 @@ const otpSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  expireAt: {
+  createdAt: {
     type: Date,
     default: Date.now(),
-    index: { expires: "10m" },
+    index: { expires: '10m' },
   },
 });
 
