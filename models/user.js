@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     match: /.+\@.+\..+/,
     unique: true
   },
+  email_confirmed: {
+    type: Boolean,
+    required: true,
+  },
   password: {
     type: String,
     required: true,

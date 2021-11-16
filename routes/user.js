@@ -1,16 +1,24 @@
 const express = require("express");
 const userController = require("../controllers/user");
-const validator = require("../validator/user")
+const userValidator = require("../validator/user")
 const auth = require("../validator/auth")
+const otpController = require("../controllers/otp");
+const otpValidator = require("../validator/otp")
 
 const router = express.Router();
 
-router.post("/", validator.createUserValidator, userController.createUser);
+// CRUD
+router.post("/", userValidator.createUserValidator, userController.createUser);
 router.get("/", auth.verifyToken, userController.getUsers);
 router.get("/:id", userController.getUser);
-router.patch("/:id", [auth.verifyToken, validator.updateUserValidator], userController.updateUser);
+router.patch("/:id", [auth.verifyToken, userValidator.updateUserValidator], userController.updateUser);
 // router.delete("/:id", userController.deleteUser);
 
-router.post("/login", validator.loginValidator, userController.loginUser);
+// Login
+router.post("/login", userValidator.loginValidator, userController.loginUser);
+
+// Verify Email
+router.post("/send", otpValidator.sendValidator, otpController.emailOtp);
+router.post("/verify", otpValidator.verifyValidator, otpController.verifyAccount);
 
 module.exports = router;
