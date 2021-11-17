@@ -1,10 +1,16 @@
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const Applicant = require("../models/applicant");
 
 exports.createApplicant = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   const myValidationResult = validationResult.withDefaults({
     formatter: (error) => error.msg,
   });
@@ -55,6 +61,12 @@ exports.getApplicant = async (req, res) => {
 };
 
 exports.updateApplicant = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   const myValidationResult = validationResult.withDefaults({
     formatter: (error) => {
       return error.msg;
@@ -85,6 +97,12 @@ exports.updateApplicant = async (req, res) => {
 };
 
 exports.deleteApplicant = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   try {
     const applicant = await Applicant.findById(req.params.id);
     await applicant.remove();

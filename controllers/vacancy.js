@@ -1,10 +1,16 @@
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const Vacancy = require("../models/vacancy");
 
 exports.createVacancy = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   const myValidationResult = validationResult.withDefaults({
     formatter: (error) => error.msg,
   });
@@ -55,6 +61,12 @@ exports.getVacancy = async (req, res) => {
 };
 
 exports.updateVacancy = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   const myValidationResult = validationResult.withDefaults({
     formatter: (error) => {
       return error.msg;
@@ -85,6 +97,12 @@ exports.updateVacancy = async (req, res) => {
 };
 
 exports.deleteVacancy = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   try {
     const vacancy = await Vacancy.findById(req.params.id);
     await vacancy.remove();
