@@ -23,7 +23,7 @@ exports.createUserValidator = [
 
   // password
   body("password", "password is required").notEmpty(),
-  body("surname", "password must be a String").isString(),
+  body("password", "password must be a String").isString(),
   body("password", "password must at least have 8 characters").isLength({
     min: 8,
   }),

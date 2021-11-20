@@ -12,7 +12,7 @@ router.post("/", userValidator.createUserValidator, userController.createUser);
 router.get("/", auth.verifyToken, userController.getUsers);
 router.get("/:id", userController.getUser);
 router.patch("/:id", [auth.verifyToken, userValidator.updateUserValidator], userController.updateUser);
-// router.delete("/:id", userController.deleteUser);
+router.delete("/:id", auth.verifyToken, userController.deleteUser);
 
 // Login
 router.post("/login", userValidator.loginValidator, userController.loginUser);
@@ -20,5 +20,9 @@ router.post("/login", userValidator.loginValidator, userController.loginUser);
 // Verify Email
 router.post("/send", otpValidator.sendValidator, otpController.emailOtp);
 router.post("/verify", otpValidator.verifyValidator, otpController.verifyAccount);
+
+// Change Password
+router.post("/password/otp", otpValidator.sendValidator, otpController.forgotPasswordOtp);
+router.post("/password/change", otpValidator.changePasswordValidator, otpController.changePassword);
 
 module.exports = router;

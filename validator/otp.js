@@ -15,3 +15,20 @@ exports.verifyValidator = [
     max: 6,
   }),
 ];
+
+exports.changePasswordValidator = [
+  // code
+  body("code", "code is required").notEmpty(),
+  body("code", "code must be a 6 digit Integer").isNumeric(),
+  body("code", "code must be a 6 digit Integer").isLength().isLength({
+    min: 6,
+    max: 6,
+  }),
+
+  // new_password
+  body("new_password", "new_password is required").notEmpty(),
+  body("new_password", "new_password must be a String").isString(),
+  body("new_password", "new_password must at least have 8 characters").isLength({
+    min: 8,
+  }),
+];

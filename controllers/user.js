@@ -24,6 +24,7 @@ exports.createUser = async (req, res) => {
     macro.failResponse(res, error.message, 500);
   }
 
+  user.password = undefined;
   otpController.emailOtp(req, res);
 
   macro.successResponse(res, {
@@ -82,15 +83,22 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
+
   try {
-    const user = await user.findById(req.params.id);
+    const user = await User.findById(req.params.id);
     await user.remove();
     macro.successResponse(
       res,
       "user with id = ".concat(req.params.id).concat(" has been deleted")
     );
-  } catch {
+  } catch (err) {
     macro.failResponse(res, "user not found", 404);
+    // macro.failResponse(res, err.message, 500);
   }
 };
 
