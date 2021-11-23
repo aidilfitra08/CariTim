@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema({
   profile_picture: {
     type: String,
   },
+
+  //mungkin dapat ditambah kalo usernya active atau engga, untuk return data di chat
+  //kalo user ini lagi active atau engga
 });
 
 module.exports = mongoose.model("User", userSchema);
