@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const macro = require("../macro");
 
 const Vacancy = require("../models/vacancy");
 
@@ -29,21 +30,27 @@ exports.createVacancy = async (req, res) => {
   try {
     await vacancy.save();
   } catch (error) {
-    res.status(500).send({
-      success: false,
-      error: error.message,
-    });
+    macro.failResponse(res, error.message, 500);
   }
 
-  res.send({ success: true, data: vacancy });
+  // res.send({ success: true, data: vacancy });
 };
 
 exports.getVacancys = async (req, res) => {
-  const vacancy = await Vacancy.find().select("-__v");
-  res.send({ success: true, data: vacancy });
+  
+  // var decoded = jwt.decode(req.token, {complete: true});
+  // console.log(decoded.header);
+  // console.log(decoded.payload);
+  // var decoded = jwt.verify(req.token, process.env.SECRET_KEY);
+  // console.log(decoded);
+  // jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+  //   if (err) {
+  //     macro.failResponse(res, err.message, 403);
+  //   }
+  // });
 
-//   const posts = await Post.find().select("-__v");
-//   res.send({ success: true, data: posts });
+  const vacancy = await Vacancy.find().select("-__v");
+  macro.successResponse(res, vacancy);
 };
 
 exports.getVacancy = async (req, res) => {
