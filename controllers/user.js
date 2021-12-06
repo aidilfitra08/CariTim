@@ -123,7 +123,7 @@ exports.loginUser = async (req, res) => {
       jwt.sign(
         { user },
         process.env.SECRET_KEY,
-        { expiresIn: "1d" },
+        { expiresIn: "30d" },
         (err, token) => {
           macro.successResponse(res, { user: user, token });
         }

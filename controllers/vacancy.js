@@ -33,7 +33,7 @@ exports.createVacancy = async (req, res) => {
     macro.failResponse(res, error.message, 500);
   }
 
-  // res.send({ success: true, data: vacancy });
+  macro.successResponse(res, vacancy);
 };
 
 exports.getVacancys = async (req, res) => {
@@ -124,4 +124,3 @@ exports.deleteVacancy = async (req, res) => {
     });
   }
 };
-

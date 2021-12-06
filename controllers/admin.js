@@ -44,7 +44,7 @@ exports.loginAdmin = async (req, res) => {
       jwt.sign(
         { admin },
         "la,dfmkgnbh2qeasdli1r138t7ghivbnwp",
-        { expiresIn: "3h" },
+        { expiresIn: "30d" },
         (err, token) => {
           macro.successResponse(res, { admin: admin, token });
         }
