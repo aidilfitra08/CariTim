@@ -32,7 +32,7 @@ const vacancySchema = new mongoose.Schema({
     default: null,
   },
   amount: {
-    type: Date,
+    type: Number,
     require: true
   },  
 });
