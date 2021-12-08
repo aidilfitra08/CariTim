@@ -6,7 +6,7 @@ const auth = require("../validator/auth")
 const router = express.Router();
 
 router.post("/", [auth.verifyToken, validator.createVacancyValidator], vacancyController.createVacancy);
-router.get("/",auth.verifyToken, vacancyController.getVacancys);
+router.get("/", vacancyController.getVacancys);
 router.get("/:id", vacancyController.getVacancy);
 router.patch("/:id", [auth.verifyToken, validator.updateVacancyValidator], vacancyController.updateVacancy);
 router.delete("/:id", auth.verifyToken, vacancyController.deleteVacancy);
