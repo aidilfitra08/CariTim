@@ -1,6 +1,7 @@
 const express = require("express");
 const applicantController = require("../controllers/applicant");
 const validator = require("../validator/applicant")
+const auth = require("../validator/auth")
 
 const router = express.Router();
 
