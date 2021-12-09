@@ -55,7 +55,7 @@ exports.getVacancys = async (req, res) => {
 
 exports.getVacancyByUser = async (req, res) => {
   try {
-    const vacancy = await Vacancy.findById(req.params.id).select(
+    const vacancy = await Vacancy.find({user_id: req.params.id}).select(
       "-__v"
     );
     res.send(vacancy);

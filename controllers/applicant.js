@@ -48,7 +48,7 @@ exports.getApplicants = async (req, res) => {
 
 exports.getApplicantByUser = async (req, res) => {
   try {
-    const applicant = await Applicant.findById(req.params.id).select(
+    const applicant = await Applicant.find({user_id: req.params.id}).select(
       "-__v"
     );
     res.send(applicant);
