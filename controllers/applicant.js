@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 // const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const macro = require("../macro");
 
 const Applicant = require("../models/applicant");
 
