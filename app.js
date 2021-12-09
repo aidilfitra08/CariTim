@@ -19,6 +19,7 @@ mongoose.connection.on("error", (err) => {
 const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
+const notificationRoutes = require("./routes/notification");
 
 //Vacancy Routes
 const vacancyRoutes = require("./routes/vacancy");
@@ -32,11 +33,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 app.get("/", function (req, res) {
-  res.send('BACKEND CARI TIM NIH BOS')
+  res.send('BACKEND CARI TIM')
 });
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
 app.use("/admins", adminRoutes);
+app.use("/notifications", notificationRoutes);
 
 app.use("/vacancys", vacancyRoutes);
 app.use("/applicants", applicantRoutes);
