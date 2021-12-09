@@ -4,11 +4,11 @@ const validator = require("../validator/applicant")
 
 const router = express.Router();
 
-router.post("/", validator.createApplicantValidator, applicantController.createApplicant);
+router.post("/", [auth.verifyToken, validator.createApplicantValidator], applicantController.createApplicant);
 router.get("/", applicantController.getApplicants);
 router.get("/user/:id", applicantController.getApplicantByUser);
 router.get("/:id", applicantController.getApplicant);
-router.patch("/:id", validator.updateApplicantValidator, applicantController.updateApplicant);
-router.delete("/:id", applicantController.deleteApplicant);
+router.patch("/:id", [auth.verifyToken, validator.updateApplicantValidator], applicantController.updateApplicant);
+router.delete("/:id", auth.verifyToken, applicantController.deleteApplicant);
 
 module.exports = router;
