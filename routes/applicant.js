@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/", validator.createApplicantValidator, applicantController.createApplicant);
 router.get("/", applicantController.getApplicants);
+router.get("/user/:id", applicantController.getApplicantByUser);
 router.get("/:id", applicantController.getApplicant);
 router.patch("/:id", validator.updateApplicantValidator, applicantController.updateApplicant);
 router.delete("/:id", applicantController.deleteApplicant);

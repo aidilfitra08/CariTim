@@ -53,6 +53,20 @@ exports.getVacancys = async (req, res) => {
   res.send(vacancy);
 };
 
+exports.getVacancyByUser = async (req, res) => {
+  try {
+    const vacancy = await Vacancy.findById(req.params.id).select(
+      "-__v"
+    );
+    res.send(vacancy);
+  } catch {
+    res.status(404).send({
+      success: false,
+      error: "vacancy by user not found!",
+    });
+  }
+};
+
 exports.getVacancy = async (req, res) => {
   try {
     const vacancy = await Vacancy.findById(req.params.id).select(

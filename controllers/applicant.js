@@ -46,6 +46,20 @@ exports.getApplicants = async (req, res) => {
 //   res.send({ success: true, data: posts });
 };
 
+exports.getApplicantByUser = async (req, res) => {
+  try {
+    const applicant = await Applicant.findById(req.params.id).select(
+      "-__v"
+    );
+    res.send(applicant);
+  } catch {
+    res.status(404).send({
+      success: false,
+      error: "applicant not found!",
+    });
+  }
+};
+
 exports.getApplicant = async (req, res) => {
   try {
     const applicant = await Applicant.findById(req.params.id).select(
