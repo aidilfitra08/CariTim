@@ -9,11 +9,11 @@ const User = require("../models/user");
 
 // API CLear
 exports.createRoomChat = async (req, res) => {
-//   jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
-//     if (err) {
-//       macro.failResponse(res, err.message, 403);
-//     }
-//   });
+  jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+    if (err) {
+      macro.failResponse(res, err.message, 403);
+    }
+  });
 
   const myValidationResult = validationResult.withDefaults({
     formatter: (error) => error.msg,
@@ -56,11 +56,11 @@ exports.createRoomChat = async (req, res) => {
 
 // API Clear
 exports.createMessage = async (req, res) => {
-    //   jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
-    //     if (err) {
-    //       macro.failResponse(res, err.message, 403);
-    //     }
-    //   });
+      jwt.verify(req.token, process.env.SECRET_KEY, (err, authData) => {
+        if (err) {
+          macro.failResponse(res, err.message, 403);
+        }
+      });
     
       const myValidationResult = validationResult.withDefaults({
         formatter: (error) => error.msg,
@@ -76,14 +76,14 @@ exports.createMessage = async (req, res) => {
       var decoded = jwt.verify(req.token, process.env.SECRET_KEY);
       console.log(decoded);
 
-      const message = new Messages(req.body);
-      message.user = decoded.user._id;
+      const messages = new Messages(req.body);
+      messages.user = decoded.user._id;
     //   message.user =
 
     //   chat.date = new Date().getTime();
     
       try {
-        await message.save();
+        await messages.save();
       } catch (error) {
         res.status(500).send({
           success: false,
@@ -91,7 +91,7 @@ exports.createMessage = async (req, res) => {
         });
       }
     
-      res.send({ success: true, data: message });
+      res.send({ success: true, data: messages });
     };
 
 

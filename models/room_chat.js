@@ -6,8 +6,8 @@ var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 const roomSchema = new mongoose.Schema({
-    name: { type: String, lowercase: true, unique: true },
-    topic: String,
+    // name: { type: String, lowercase: true, unique: true },
+    // topic: String,
     users: [ObjectId],
     messages: [],
     created_at: Date,
