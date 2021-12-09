@@ -40,7 +40,7 @@ exports.createApplicant = async (req, res) => {
 
 exports.getApplicants = async (req, res) => {
   const applicant = await Applicant.find().select("-__v");
-  res.send({ success: true, data: applicant });
+  res.send(applicant);
 
 //   const posts = await Post.find().select("-__v");
 //   res.send({ success: true, data: posts });
@@ -51,7 +51,7 @@ exports.getApplicant = async (req, res) => {
     const applicant = await Applicant.findById(req.params.id).select(
       "-__v"
     );
-    res.send({ success: true, data: applicant });
+    res.send(applicant);
   } catch {
     res.status(404).send({
       success: false,

@@ -50,7 +50,7 @@ exports.getVacancys = async (req, res) => {
   // });
 
   const vacancy = await Vacancy.find().select("-__v");
-  macro.successResponse(res, vacancy);
+  res.send(vacancy);
 };
 
 exports.getVacancy = async (req, res) => {
@@ -58,7 +58,7 @@ exports.getVacancy = async (req, res) => {
     const vacancy = await Vacancy.findById(req.params.id).select(
       "-__v"
     );
-    res.send({ success: true, data: vacancy });
+    res.send(vacancy);
   } catch {
     res.status(404).send({
       success: false,
